@@ -1,4 +1,4 @@
-# AI CRM — Phase 1–6
+# Deoware Lead AI — AI CRM (Phase 1–6)
 
 The foundation of the AI-powered CRM + growth engine:
 - **Phase 1**: lead pipeline, auth, activity timeline
