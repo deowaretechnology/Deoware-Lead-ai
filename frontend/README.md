@@ -28,7 +28,7 @@ Opens on `http://localhost:3000`. Make sure the backend is running first.
 - `/dashboard/today` — **start here every day.** Counters: new leads today,
   leads waiting for a first message, email / WhatsApp sent vs limit
   (automatic), Instagram / Facebook sent vs target (by hand). "Run
-  auto-outreach now". Instagram + Facebook send lists: ✨ Draft (AI) →
+  auto-outreach now". Instagram + Facebook send lists: first message already drafted (✨ Better with AI optional) →
   Copy & open (copies the message, opens their profile) → Mark sent
 
 - `/register`, `/login` — create an account / log in (JWT stored in a cookie)
