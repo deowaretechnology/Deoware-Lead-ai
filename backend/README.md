@@ -154,7 +154,7 @@ messaged you. Everything else uses approved templates:
 **Instagram / Facebook** - Meta doesn't allow automated DMs to people who
 never messaged you, so the Today page gives you a send list (up to
 `INSTAGRAM_DAILY_TARGET` / `FACEBOOK_DAILY_TARGET`, default 20 each): AI
-draft → Copy & open profile → paste → **Mark sent**. Once they reply, the
+ready-made draft (the `/api/outreach/today` queues include a `draft` per lead; "Better with AI" asks Claude for a nicer one) → Copy & open profile → paste → **Mark sent**. Once they reply, the
 Inbox takes over automatically.
 
 **Opt-out** - "not interested" in any reply, the unsubscribe link, or the

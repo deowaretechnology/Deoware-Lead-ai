@@ -45,7 +45,7 @@ The foundation of the AI-powered CRM + growth engine:
 ## Your daily routine (~15 minutes)
 1. Open **Today** - the morning job has already found new leads and sent
    the first emails / WhatsApp messages.
-2. Work the Instagram + Facebook send lists: Draft → Copy & open → paste in
+2. Work the Instagram + Facebook send lists: Ready draft (tap "Better with AI" if you want) → Copy & open → paste in
    the app → Mark sent (Meta doesn't let bots cold-DM, so this part is yours).
 3. Open **Inbox** - reply to anyone who answered, book demos.
 

@@ -7,7 +7,7 @@
 const User = require('../models/User');
 const Lead = require('../models/Lead');
 const OutreachEvent = require('../models/OutreachEvent');
-const { sendOutreach, draftOrFallback, remainingToday, OutreachError } = require('./outreachService');
+const { sendOutreach, draftOrFallback, fallbackMessage, remainingToday, OutreachError } = require('./outreachService');
 const { verifyEmail } = require('./emailVerifier');
 const { isConfigured: coldEmailConfigured } = require('./coldEmailService');
 const { dailyLimits } = require('../config/outreachConfig');
@@ -117,6 +117,13 @@ async function todaySummary(ownerId) {
   // Anyone not yet messaged on that platform
   const notYet = (channel) => ({ contactedChannels: { $ne: channel } });
 
+  const owner = await User.findById(ownerId).select('name businessName');
+  const senderName = (owner && (owner.businessName || owner.name)) || 'Deoware';
+  // Every send-list lead comes with a ready first message (plain template, no
+  // AI wait or cost). The page offers "Better with AI" for a rewritten one.
+  const withDraft = (leads) =>
+    leads.map((l) => ({ ...l.toObject(), draft: fallbackMessage(l, 'first_touch', senderName) }));
+
   const instagram = await Lead.find({ ...baseQuery, instagramHandle: { $gt: '' }, ...notYet('instagram') })
     .select(pick)
     .sort({ createdAt: 1 })
@@ -135,7 +142,7 @@ async function todaySummary(ownerId) {
     ready: { email: coldEmailConfigured(), whatsapp: whatsappReady() },
     newLeadsToday,
     awaitingFirstMessage,
-    queues: { instagram, facebook },
+    queues: { instagram: withDraft(instagram), facebook: withDraft(facebook) },
   };
 }
 

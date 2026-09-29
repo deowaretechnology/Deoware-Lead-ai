@@ -263,6 +263,7 @@ export interface TodayLead {
   tags: string[];
   address: string;
   website: string;
+  draft: string;
 }
 
 export interface TodaySummary {

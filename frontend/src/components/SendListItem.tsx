@@ -17,10 +17,11 @@ function profileUrl(lead: TodayLead, channel: 'instagram' | 'facebook') {
   return lead.facebookUrl;
 }
 
-// One row of the Today send list: draft with AI -> copy & open their profile
+// One row of the Today send list: ready draft (optionally AI-improved) -> copy & open their profile
 // -> paste & send there -> "Mark sent" (logs it + schedules the follow-up).
 export default function SendListItem({ lead, channel, onSent }: Props) {
-  const [message, setMessage] = useState('');
+  // Starts with the ready-made draft from the server; "Better with AI" swaps in a Claude version
+  const [message, setMessage] = useState(lead.draft || '');
   const [usedAi, setUsedAi] = useState(false);
   const [busy, setBusy] = useState<'draft' | 'send' | null>(null);
   const [copied, setCopied] = useState(false);
@@ -34,7 +35,7 @@ export default function SendListItem({ lead, channel, onSent }: Props) {
       setMessage(res.data.data.message);
       setUsedAi(true);
     } catch (err) {
-      setError(getErrorMessage(err, 'Could not draft'));
+      setError(getErrorMessage(err, 'Could not get an AI version'));
     } finally {
       setBusy(null);
     }
@@ -83,15 +84,6 @@ export default function SendListItem({ lead, channel, onSent }: Props) {
             {!lead.website ? ' · no website' : ''}
           </p>
         </div>
-        {!message && (
-          <button
-            onClick={draft}
-            disabled={busy !== null}
-            className="flex-shrink-0 rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
-          >
-            {busy === 'draft' ? 'Drafting…' : '✨ Draft'}
-          </button>
-        )}
       </div>
 
       {message && (
@@ -103,6 +95,13 @@ export default function SendListItem({ lead, channel, onSent }: Props) {
             className="mt-2 w-full rounded-lg border border-slate-300 px-2.5 py-2 text-sm focus:border-slate-900 focus:outline-none"
           />
           <div className="mt-2 flex flex-wrap gap-2">
+            <button
+              onClick={draft}
+              disabled={busy !== null}
+              className="rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+            >
+              {busy === 'draft' ? 'Writing…' : usedAi ? '✨ Another version' : '✨ Better with AI'}
+            </button>
             <button onClick={copyAndOpen} className="rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50">
               {copied ? 'Copied - paste it there' : `Copy & open ${channel === 'instagram' ? 'Instagram' : 'Facebook'}`}
             </button>
